@@ -74,7 +74,7 @@ npm --prefix desktop run build:media   # dist/desktop/media/ を使い回せば�
 npm run desktop:mac
 ```
 
-で生成した ZIP を Release に添付します。約 475MB の upload は HTTP 408 で落ちやすいので、
+で生成した ZIP を Release に添付します。約 493MB の upload は HTTP 408 で落ちやすいので、
 先に release を作ってから `gh release upload --clobber` をリトライループで回します。
 
 ZIP を Release に上げたら、上記手順で `.pkg` も作って同じ Release に添付します。

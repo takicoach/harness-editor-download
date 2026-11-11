@@ -11,7 +11,7 @@
 set -uo pipefail
 
 REPO="takicoach/harness-editor-download"
-FALLBACK_URL="https://github.com/${REPO}/releases/download/v0.8.3/Harness-Editor-0.8.3-mac-apple-silicon.zip"
+FALLBACK_URL="https://github.com/${REPO}/releases/download/v0.8.4/Harness-Editor-0.8.4-mac-apple-silicon.zip"
 APP_NAME="Harness Editor.app"
 DEST_DIR="${HARNESS_EDITOR_DEST:-/Applications}"
 DOWNLOAD_DIR="${HARNESS_EDITOR_DOWNLOAD_DIR:-$HOME/Downloads}"
@@ -50,13 +50,13 @@ URL=$(printf '%s\n' "$API_JSON" | grep -o 'https://[^"]*\.zip' | head -1)
 VERSION=$(printf '%s\n' "$API_JSON" | sed -n 's/.*"tag_name": *"v\{0,1\}\([^"]*\)".*/\1/p' | head -1)
 if [ -z "$URL" ]; then
   URL="$FALLBACK_URL"
-  VERSION="0.8.3"
+  VERSION="0.8.4"
   say "  （バージョン確認に失敗したので、既定の ${VERSION} を使います）"
 fi
 ZIP_NAME=$(basename "$URL")
 ok "バージョン ${VERSION}"
 
-# 3. すでに同じ ZIP があれば使い回す（475MB の再ダウンロードを避ける）
+# 3. すでに同じ ZIP があれば使い回す（493MB の再ダウンロードを避ける）
 REMOTE_SIZE=$(curl -sIL --max-time 20 "$URL" 2>/dev/null | tr -d '\r' | awk 'tolower($1)=="content-length:"{v=$2} END{print v+0}')
 ZIP_PATH="${DOWNLOAD_DIR}/${ZIP_NAME}"
 mkdir -p "$DOWNLOAD_DIR" 2>/dev/null
@@ -83,7 +83,7 @@ else
      && [ "$(stat -f%z "$ZIP_PATH" 2>/dev/null || echo 0)" -gt "$REMOTE_SIZE" ]; then
     rm -f "$ZIP_PATH"
   fi
-  step "ダウンロードしています（約 475 MB・回線により 5〜15 分）"
+  step "ダウンロードしています（約 493 MB・回線により 5〜15 分）"
   say "  進捗バーが伸びていれば動いています。終わるまでそのままお待ちください。"
   if ! curl -fL --progress-bar --retry 3 --retry-delay 2 -C - -o "$ZIP_PATH" "$URL"; then
     die "ダウンロードに失敗しました。" \
